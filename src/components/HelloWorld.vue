@@ -1,17 +1,52 @@
-<script setup lang="ts">
-defineProps<{
-  msg: string
-}>()
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "HelloWorld",
+  props: {
+    msg: String,
+  },
+  setup() {
+    const uniSdk = uni;
+
+    return {
+      uniSdk,
+    };
+  },
+  mounted() {
+    console.log("孙组件初始化传讯");
+    const info = {
+      name: "孙组件初始化传讯",
+    };
+    this.uniSdk.postMessage({
+      data: {
+        info,
+      },
+    });
+  },
+  methods: {
+    onEmitClick() {
+      this.$emit("emitChildren", "孙组件提级传讯测试");
+    },
+    onBtnClick() {
+      console.log("孙组件点击传讯");
+      const info = {
+        name: "孙组件点击传讯",
+      };
+      this.uniSdk.postMessage({
+        data: {
+          info,
+        },
+      });
+    },
+  },
+});
 </script>
 
 <template>
   <div class="greetings">
     <h1 class="green">{{ msg }}</h1>
-    <h3>
-      You’ve successfully created a project with
-      <a target="_blank" href="https://vitejs.dev/">Vite</a> +
-      <a target="_blank" href="https://v2.vuejs.org/">Vue 2</a>. What's next?
-    </h3>
+    <button @click="onBtnClick()">孙组件传讯测试</button>
+    <button @click="onEmitClick()">孙组件提级传讯测试</button>
   </div>
 </template>
 
@@ -24,6 +59,10 @@ h1 {
 
 h3 {
   font-size: 1.2rem;
+}
+
+.greetings {
+  background: #f1f1f1;
 }
 
 .greetings h1,

@@ -1,30 +1,41 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import HelloWorld from "@/components/HelloWorld.vue";
+import { defineComponent, onMounted } from "vue";
 export default defineComponent({
+  components: {
+    HelloWorld,
+  },
   setup() {
-    const emitData = () => {
-      const uniSdk = uni;
+    const uniSdk = uni;
+    const msg = "孙组件测试";
+    return {
+      uniSdk,
+      msg,
+    };
+  },
+  mounted() {
+    this.emitData("子组件初始化传讯");
+  },
+  methods: {
+    emitData(text: string) {
+      console.log(text);
       const info = {
-        name: "wft",
-        age: 18,
+        name: text,
       };
-      console.log(uniSdk, info);
-      uniSdk.postMessage({
+      this.uniSdk.postMessage({
         data: {
           info,
         },
       });
-    };
-    return {
-      emitData,
-    };
+    },
   },
 });
 </script>
 
 <template>
   <div id="app">
-    <button @click="emitData">子传父</button>
+    <button @click="emitData('子组件点击传讯')">子传父</button>
+    <HelloWorld :msg="msg" @emitChildren="emitData" />
   </div>
 </template>
 
