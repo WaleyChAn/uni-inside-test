@@ -15,6 +15,12 @@ export default defineComponent({
   },
   mounted() {
     this.emitData("子组件初始化传讯");
+    document.addEventListener("UniAppJSBridgeReady", () => {
+      this.emitData("子组件等待UniAppJSBridgeReady后传讯");
+    });
+    setTimeout(() => {
+      this.emitData("子组件等待3秒后传讯");
+    }, 3000);
   },
   methods: {
     emitData(text: string) {
